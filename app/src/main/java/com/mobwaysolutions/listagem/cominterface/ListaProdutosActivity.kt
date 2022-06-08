@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mobwaysolutions.listagem.R
 import com.mobwaysolutions.listagem.comclosure.ProdutosAdapterComClosure
+import com.mobwaysolutions.listagem.sealedclass.TipoInteracao
 
 class ListaProdutosActivity : AppCompatActivity() {
 
@@ -29,14 +30,19 @@ class ListaProdutosActivity : AppCompatActivity() {
 
         // Inicializar meu recycler view
         recyclerViewProdutos = findViewById(R.id.rvListaProdutos)
-        recyclerViewProdutos.adapter = ProdutosAdapterComClosure(listaDeProdutos,
-            onClickItem = {
-                onClickLinhaInteira(it)
-            }, onClickNovo = {
-                onClickButtonNovo(it)
-            }, onClickEdit = {
-                onClickButtonEditar(it)
-            })
+        recyclerViewProdutos.adapter = ProdutosAdapterComClosure(listaDeProdutos) { produto, tipoInteracao ->
+            when (tipoInteracao) {
+                is TipoInteracao.OnClickItem -> {
+                    onClickLinhaInteira(produto)
+                }
+                is TipoInteracao.OnClickEdit -> {
+                    onClickButtonEditar(produto)
+                }
+                is TipoInteracao.OnClickNew -> {
+                    onClickButtonNovo(produto)
+                }
+            }
+        }
         recyclerViewProdutos.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }

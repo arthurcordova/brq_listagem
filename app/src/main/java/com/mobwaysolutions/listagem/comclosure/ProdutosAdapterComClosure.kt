@@ -7,15 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobwaysolutions.listagem.R
 import com.mobwaysolutions.listagem.cominterface.Produto
 import com.mobwaysolutions.listagem.cominterface.ProdutosViewHolder
+import com.mobwaysolutions.listagem.sealedclass.TipoInteracao
 
 /**
  * É o responsável por fazer toda a mecanica da lista, juntar o item com a lista e mandar para o recycler view
  */
 class ProdutosAdapterComClosure(
     val listDeProdutos: List<Produto>,
-    private val onClickItem: (Produto) -> Unit,
-    private val onClickNovo: (Produto) -> Unit,
-    private val onClickEdit: (Produto) -> Unit
+    private val onClick: (Produto, TipoInteracao) -> Unit
 ) :
     RecyclerView.Adapter<ProdutosViewHolder>() {
 
@@ -35,13 +34,13 @@ class ProdutosAdapterComClosure(
         val produtoSelecionado = listDeProdutos[position]
         holder.preencherCampos(produtoSelecionado)
         holder.itemView.setOnClickListener {
-            onClickItem.invoke(produtoSelecionado)
+            onClick.invoke(produtoSelecionado, TipoInteracao.OnClickItem)
         }
         holder.btEditar.setOnClickListener {
-            onClickEdit.invoke(produtoSelecionado)
+            onClick.invoke(produtoSelecionado, TipoInteracao.OnClickEdit)
         }
         holder.btNovo.setOnClickListener {
-            onClickNovo.invoke(produtoSelecionado)
+            onClick.invoke(produtoSelecionado, TipoInteracao.OnClickNew)
         }
     }
 
